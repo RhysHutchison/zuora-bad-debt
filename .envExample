@@ -1,0 +1,14 @@
+USERNAME =
+SANDBOX_PASSWORD =
+PRODUCTION_PASSWORD =
+WSDL = 'zuora.a.80.0.wsdl'
+PRODUCTION_ENDPOINT = https://www.zuora.com/apps/services/a/80.0
+SANDBOX_ENDPOINT = https://apisandbox.zuora.com/apps/services/a/80.0
+DEBUG = TRUE
+QUERY_BATCH_SIZE = 2000
+SANDBOX_ENVIRONMENT = FALSE
+CSVFILE = '/Users/Hutcho44/Downloads/Bad debts_by_invoice_30082016 - iNVOICE NO..csv'
+
+API_KEY =
+API_SESSION =
+API_SESSION_TIMESTAMP =
