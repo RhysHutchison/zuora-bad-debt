@@ -1,0 +1,19 @@
+{
+  "name": "hutcho44/zuora-bad-debts",
+  "authors": [
+    {
+      "name": "Rhys Hutchison",
+      "email": "rhutchison@deputy.com"
+    }
+  ],
+  "require": {
+    "vlucas/phpdotenv": "^2.4"
+  },
+  "autoload": {
+    "classmap": [
+      "config/Zuora/",
+      "application.php",
+      "controller/"
+    ]
+  }
+}
