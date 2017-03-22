@@ -21,7 +21,7 @@ class application
         $this->colourRed = "\033[1;31m";
         $this->colourBlack = "\033[0m \n";
 
-        $_config->wsdl = 'config/' . getenv('WSDL');
+        $_config->wsdl = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . getenv('WSDL');
 
         $this->_instance = API::getInstance($_config);
 
