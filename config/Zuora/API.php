@@ -66,13 +66,17 @@ class API
 
     protected function __construct($config)
     {
-        self::$_config = $config;
+        try {
+            self::$_config = $config;
 
-        $this->_client = new SoapClient(self::$_config->wsdl, [
-            'soap_version' => SOAP_1_1,
-            'trace' => 1,
-            'classmap' => self::$_classmap
-        ]);
+            $this->_client = new SoapClient(self::$_config->wsdl, [
+                'soap_version' => SOAP_1_1,
+                'trace' => 1,
+                'classmap' => self::$_classmap
+            ]);
+        } catch (SoapFault $exception) {
+            echo $exception->getMessage();
+        }
     }
 
     /**
