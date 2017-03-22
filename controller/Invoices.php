@@ -16,14 +16,14 @@ class Invoices
 
         if (($handle = fopen($file, "r")) !== FALSE) {
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                $num = count($data);
-                $row++;
-
-                for ($c = 0; $c < $num; $c++) {
-                    array_push($invoices, $data[$c]);
+                # skip headers & final row in csv file
+                if ($row == 1 or $row == count(file($file, FILE_SKIP_EMPTY_LINES))) {
+                    $row++;
+                    continue;
                 }
+                $row++;
+                array_push($invoices, $data[0]);
             }
-
             fclose($handle);
         }
 
