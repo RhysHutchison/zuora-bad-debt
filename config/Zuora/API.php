@@ -116,6 +116,9 @@ class API
             $session = $result->result->Session;
             $serverUrl = $result->result->ServerUrl;
         } catch (SoapFault $e) {
+            echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =";
+            echo "\nIs Zuora.com Two-Factor Authentication Required via Login?";
+            echo "\n= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =\n";
             throw new Fault('ERROR in ' . __METHOD__, $e, $this->_client->__getLastRequestHeaders(), $this->_client->__getLastRequest(), $this->_client->__getLastResponseHeaders(), $this->_client->__getLastResponse());
         }
 
