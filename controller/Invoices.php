@@ -22,7 +22,10 @@ class Invoices
                     continue;
                 }
                 $row++;
-                array_push($invoices, $data[0]);
+
+                # WHICH COLUMN ARE THE INVOICE IDs IN - SET IN ENV?!
+                array_push($invoices, $data[getenv('CSVINVCOL')]);
+
             }
             fclose($handle);
         }
