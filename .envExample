@@ -7,7 +7,8 @@ SANDBOX_ENDPOINT = https://apisandbox.zuora.com/apps/services/a/80.0
 DEBUG = TRUE
 QUERY_BATCH_SIZE = 2000
 SANDBOX_ENVIRONMENT = FALSE
-CSVFILE = '/Users/Hutcho44/Downloads/Bad debts_by_invoice_30082016 - iNVOICE NO..csv'
+CSVFILE = '/Users/rhyshutchison/Downloads/ZBD/April 2017/write_off_list_april_2017.csv'
+CSVINVCOL = 1
 
 API_KEY =
 API_SESSION =
