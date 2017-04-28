@@ -81,7 +81,7 @@ class application
             $this->_instance->addSessionToHeader($session);
 
             echo "\n= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =";
-            echo "\n API Session already exists for $endpoint";
+            echo "\n API Session already exists for $endpoint\n";
 
         } else {
             if (!is_null($valid)) {
@@ -130,7 +130,7 @@ class application
             }
         } else {
             // notify console if $invoice can not be found
-            echo "Invoice #$invoiceNumber can not be found. \n";
+            echo "Invoice $invoiceNumber can not be found. \n";
         }
     }
 
