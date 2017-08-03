@@ -2,6 +2,16 @@
 
 class Invoices
 {
+    public static $instance;
+
+    public static function getInstance()
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
     /**
      * Get Zuora Invoices from CSV File
      *
@@ -9,7 +19,7 @@ class Invoices
      *
      * @return array
      */
-    public static function getInvoiceIDsFromCSV($file)
+    public function getInvoiceIDsFromCSV($file)
     {
         $row = 1;
         $invoices = [];
@@ -38,7 +48,7 @@ class Invoices
      * @param $invoice object
      * @return string query
      */
-    public static function allFields($table, $invoice)
+    public function allFields($table, $invoice)
     {
 
         switch ($table) {
@@ -142,13 +152,15 @@ class Invoices
         }
     }
 
-    public static function balance($invoice) {
+    public function balance($invoice)
+    {
         return "SELECT Balance
                 FROM Invoice
                 WHERE InvoiceNumber = '$invoice->InvoiceNumber'";
     }
 
-    public static function invoiceItemId($invoiceItemId) {
+    public function invoiceItemId($invoiceItemId)
+    {
         return "select  AccountingCode, 
                                 AppliedToInvoiceItemId,  
                                 ChargeAmount, 
