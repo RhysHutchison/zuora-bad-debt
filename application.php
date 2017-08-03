@@ -8,6 +8,9 @@ class application
      * @var API $instance
      */
     protected $_instance;
+    protected $taxationItemClass;
+    protected $adjustmentsClass;
+    protected $invoicesClass;
     protected $errors = [];
 
     public function __construct()
@@ -34,6 +37,10 @@ class application
         $this->_instance->setLocation($endpoint);
 
         $this->getSession();
+
+        $this->taxationItemClass = TaxationItem::getInstance();
+        $this->adjustmentsClass = Adjustments::getInstance();
+        $this->invoicesClass = Invoices::getInstance();
 
         $this->getInvoices();
 
@@ -105,13 +112,13 @@ class application
      */
     private function getInvoices()
     {
-        $invoices = Invoices::getInvoiceIDsFromCSV(getenv('CSVFILE'));
+        $invoices = $this->invoicesClass->getInvoiceIDsFromCSV(getenv('CSVFILE'));
 
         foreach ($invoices as $row => $invoiceId) {
             $invoice = (object)null;
             $invoice->InvoiceNumber = $invoiceId;
 
-            $this->handleInvoice($this->_instance->query(Invoices::allFields('Invoice', $invoice)), $invoiceId);
+            $this->handleInvoice($this->_instance->query($this->invoicesClass->allFields('Invoice', $invoice)), $invoiceId);
         }
     }
 
@@ -139,14 +146,14 @@ class application
         // $invoice status must be posted to create adjustments
         if ($invoice->Status == 'Posted') {
             // get all $invoiceItems within this $invoice in Zuora
-            $invoiceItemResults = $this->_instance->query(Invoices::allFields('InvoiceItem', $invoice));
+            $invoiceItemResults = $this->_instance->query($this->invoicesClass->allFields('InvoiceItem', $invoice));
 
             // count & array of $invoiceItems returned from the query above
             $invoiceItemSize = $invoiceItemResults->result->size;
             $invoiceItemRecords = $invoiceItemResults->result->records;
 
             // get all existing $invoiceAdjustments for aforementioned $invoice
-            $itemAdjustmentResults = $this->_instance->query(Invoices::allFields('InvoiceItemAdjustment', $invoice));
+            $itemAdjustmentResults = $this->_instance->query($this->invoicesClass->allFields('InvoiceItemAdjustment', $invoice));
 
             $itemAdjustmentSize = $itemAdjustmentResults->result->size;
             $itemAdjustmentRecords = $itemAdjustmentResults->result->records;
@@ -188,7 +195,7 @@ class application
                         echo $this->colourGreen . $line . $this->colourBlack;
                     } else {
                         // get the updated remaining balance
-                        $result = $this->_instance->query(Invoices::balance($invoice));
+                        $result = $this->_instance->query($this->invoicesClass->balance($invoice));
                         $remainingBalance = $result->result->records->Balance;
 
                         if ($remainingBalance > 0) {
@@ -199,17 +206,17 @@ class application
                                 if ($invoiceItem->TaxAmount > 0) {
 
                                     // get the updated remaining balance
-                                    $result = $this->_instance->query(Invoices::balance($invoice));
+                                    $result = $this->_instance->query($this->invoicesClass->balance($invoice));
                                     $remainingBalance = $result->result->records->Balance;
 
                                     if ($remainingBalance > 0) {
-                                        $result = $this->_instance->query(TaxationItem::getTaxationItemByInvoiceItemId($invoiceItem->Id));
+                                        $result = $this->_instance->query($this->taxationItemClass->getTaxationItemByInvoiceItemId($invoiceItem->Id));
                                         $taxationItemID = $result->result->records->Id;
 
 
                                         if ($taxationItemID) {
                                             // create new tax adjustment using $taxationItem->ID
-                                            $result = $this->_instance->createSingle(Adjustments::makeTaxAdjustment($invoice, $invoiceItem, $taxationItemID));
+                                            $result = $this->_instance->createSingle($this->adjustmentsClass->makeTaxAdjustment($invoice, $invoiceItem, $taxationItemID));
 
                                             if ($result->result->Success) {
                                                 echo "$this->colourGreen" . "Tax Adjustment Created For Invoice Item ID #$invoiceItem->Id. $this->colourBlack";
@@ -248,11 +255,11 @@ class application
                                 if ($invoiceItem->ChargeAmount > 0) {
 
                                     // get the updated remaining balance
-                                    $result = $this->_instance->query(Invoices::balance($invoice));
+                                    $result = $this->_instance->query($this->invoicesClass->balance($invoice));
                                     $remainingBalance = $result->result->records->Balance;
 
                                     if ($remainingBalance > 0) {
-                                        $result = $this->_instance->createSingle(Adjustments::makeChargeAdjustment($invoice, $invoiceItem, $remainingBalance));
+                                        $result = $this->_instance->createSingle($this->adjustmentsClass->makeChargeAdjustment($invoice, $invoiceItem, $remainingBalance));
 
                                         // if creation of chargeAdjustment was successful
                                         if ($result->result->Success) {
