@@ -9,6 +9,7 @@ QUERY_BATCH_SIZE = 2000
 SANDBOX_ENVIRONMENT = FALSE
 CSVFILE = '/Users/rhyshutchison/Downloads/ZBD/April 2017/write_off_list_april_2017.csv'
 CSVINVCOL = 1
+WRITE_OFF_DATE = 2017-07-31 (Default: 'now' if no value is set)
 
 API_KEY =
 API_SESSION =
