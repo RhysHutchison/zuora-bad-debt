@@ -1,3 +1,5 @@
 .env
 .errors
+.idea/
+zuora-bad-debt.iml
 vendor/
